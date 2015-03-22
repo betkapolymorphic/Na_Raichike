@@ -64,6 +64,22 @@ $(function(){
         Application.setOption('radius',parseInt($('#number').val()));
         Application.setOption('count',parseInt($('#count').val()));
 
+        imagesArray=[];
+        if(Application.getOption('instaToken') && $("#checkBoxInstagram").is(":checked")){
+            console.log('creating request');
+            findPlaces(Application.getOption('lat'),
+                Application.getOption('lng'),
+                Application.getOption('instaToken'),function(data){
+                    console.log("RECEIVE DATA!");
+                    for(var i=0;i<data.length;i++){
+                       // var curPhoto
+                    }
+                    console.log(data);
+                })
+
+        }
+
+        return;
         /*$.get("https://api.vk.com/method/photos.search?",{"q":1,'lat':lat,'long':lng,
          'count':500,'radius':120,'version':'5.29'},
          function(data){
@@ -73,61 +89,19 @@ $(function(){
         var imageSizes = ['src','src_big','src_small','src_xbig','src_xxbig','src_xxxbig'];
 
         $("#loadingModal").modal('show');
-        $.ajax({
-            type: "GET",
-            url:'https://api.vk.com/method/photos.search',
-            dataType: 'jsonp',
-            data:{"sort":0,'lat':Application.getOption('lat'),
-                'long':Application.getOption('lng'),
-                'count':Application.getOption('count'),
-                'radius':Application.getOption('radius')
-                ,'version':'5.29'},
-            success:function(data){
-                Application.saveOptions();
 
-                $("#loadingModal").modal('hide')
-                console.log(data);
-                data = data.response;
-                var imageBlock = $("#images");
-                imageBlock.children().remove();
-                //for(var i=data.length-1;i>=data.length-parseInt($('#count').val()) && i>=0;i--){
-                imagesArray=[];
+        if($("#checkBoxVK").is(":checked")){
+            getPhotosVK(Application.getOption('lat'),Application.getOption('lng'),
+                Application.getOption('count'),Application.getOption('radius'),
+                function(data){
 
-                for(var i=0;i<data.length;i++){
-                    for(var j=imageSizes.length-1;j>=0;j--){
-                        if(data[i][imageSizes[j]]){
-                            /*var placeLink = "<a target='_blank' href='http://www.google.com/maps/place/"+data[i]['lat']+","+data[i]['long']+"'>Show in GoogleMap</a><br>";
-                            var dateSpan = "<span>"+new Date(parseInt(data[i]['created'])*1000).toString()+"</span><br>";
-                            if(data[i]['owner_id']>0){
-                                imageBlock.append("<a target='_blank' href='http://vk.com/id"+data[i]['owner_id']+  "'><img width='500px' src='"+data[i][imageSizes[j]]+"'></a><br>"+dateSpan+placeLink+"<span>"+data[i]['text']+"</span><br>");
-                            }else{
-                                imageBlock.append("<img width='500px' src='"+data[i][imageSizes[j]]+"'><br>"+dateSpan+placeLink+"<span>"+data[i]['text']+"</span><br>");
-                            }*/
-                          //  var placeLink = "<a target='_blank' href='http://www.google.com/maps/place/"+data[i]['lat']+","+data[i]['long']+"'>Show in GoogleMap</a><br>";
-                            imagesArray.push({
-                                src:data[i][imageSizes[j]],
-                                w:data[i].width,
-                                h:data[i].height,
-                                vkid:data[i].owner_id,
-                                title : data[i]['text']+"<br>"+moment.unix(parseInt(data[i]['created'])).format('MMMM Do YYYY, h:mm:ss a')+"<br>"+moment.unix(parseInt(data[i]['created'])).fromNow(),
-                                lat:data[i]['lat'],
-                                lng:data[i]['long']
-                            });
-                            imageBlock.append('<div style="cursor: pointer;" onclick="showgalery('+(imagesArray.length-1)+')" class="item" ><img src="'+data[i]['src']+'"></div>');
+                    //easy ;)
+                    imagesArray.concat(data);
+                });
+        }
 
 
 
-
-                            break;
-                        }
-                    }
-
-                }
-                imageBlock.flexImages({rowHeight: 140});
-
-            }
-
-        });
 
     });
 

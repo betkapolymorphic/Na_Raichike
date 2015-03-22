@@ -28,14 +28,6 @@ var ApplicationSingleton = (function () {
         object.setOption = function(name,val){
             object.options[name] = val;
         };
-
-
-
-
-
-
-
-
         return object;
     }
 
