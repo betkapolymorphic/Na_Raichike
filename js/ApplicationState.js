@@ -15,9 +15,12 @@ var ApplicationSingleton = (function () {
             });
         };
         object.saveOptions = function(){
-            object.options.forEach(function(d){
-                 setCookie(d,object.options[d],365);
-            });
+
+            for (var k in Application.options){
+                if (typeof Application.options[k] !== 'function') {
+                    setCookie(k, Application.options[k],365);
+                }
+            }
         };
         object.getOption =function(name){
             return object.options[name];

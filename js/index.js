@@ -8,8 +8,17 @@ var Application = ApplicationSingleton.getInstance();
 $(function(){
 
     initRangeSlider();
-    initCurrentGeolocation();
+
     Application.loadOptions();
+    if(Application.getOption('radius')){
+            $('#number').val(Application.getOption('radius'));
+        $('input[type="range"]').val(Application.getOption('radius')).change();
+    }
+    if(Application.getOption('count')){
+        $('#count').val(Application.getOption('count'));
+    }
+
+
 
 
 
@@ -45,7 +54,7 @@ $(function(){
          );*/
         var imageSizes = ['src','src_big','src_small','src_xbig','src_xxbig','src_xxxbig'];
 
-        $("#loadingModal").modal('show')
+        $("#loadingModal").modal('show');
         $.ajax({
             type: "GET",
             url:'https://api.vk.com/method/photos.search',
@@ -57,6 +66,7 @@ $(function(){
                 ,'version':'5.29'},
             success:function(data){
                 Application.saveOptions();
+
                 $("#loadingModal").modal('hide')
                 console.log(data);
                 data = data.response;
@@ -116,6 +126,8 @@ $(function(){
 
 
 });
+
+
 var currentItemIndex = 0;
 var gallery;
 function showgalery(index){

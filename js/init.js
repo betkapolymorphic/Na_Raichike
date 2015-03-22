@@ -28,6 +28,8 @@ function initCurrentGeolocation(){
     function handle_geolocation_query(position){
         var lng = position.coords.longitude;
         var lat = position.coords.latitude;
+
+
         if(!marker){
             marker = new google.maps.Marker();
         }

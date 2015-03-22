@@ -19,6 +19,18 @@ function initialize() {
         placeMarker(event.latLng);
     });
 
+
+    if(!Application.getOption('lat') || !Application.getOption('lng')){
+        initCurrentGeolocation();
+    }else{
+        if(!marker){
+            marker = new google.maps.Marker();
+        }
+        marker.setPosition(new google.maps.LatLng(Application.getOption('lat')
+            ,Application.getOption('lng')));
+        marker.setMap(map);
+    }
+
 }
 
 
