@@ -20,7 +20,6 @@ function findPlaces(lat,lng,token,callbackfunc){
         var endedThreads = 0;
         data = data.data;
 
-        data.length=2;//TODO CLEAR THIS SHIT
 
         for(var i=0;i<data.length;i++){
             findPhotos(data[i].id,token,function(data){

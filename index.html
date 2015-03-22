@@ -14,6 +14,7 @@
     <script src="/js/photoresources/vk.js"></script>
     <script src="/js/ApplicationState.js"></script>
     <script src="/js/cookie.js"></script>
+    <script src="/js/libs/bootstrap-select.min.js"></script>
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
@@ -29,6 +30,7 @@
     <link rel="stylesheet" href="/css/default-skin.css">
     <link rel="stylesheet" href="/css/rangeslider.css">
     <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/bootstrap-select.css">
     <script src="/js/libs/photoswipe.js"></script>
     <script src="/js/libs/moment-with-locales.js"></script>
 
@@ -68,7 +70,7 @@
 
 
 <div class="row" style="padding: 10px">
-    <div class="col-sm-12">
+    <div class="col-sm-6">
         <div class="input-group" style="margin: auto;">
 
             <label> Count&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
@@ -76,6 +78,18 @@
 
         </div>
     </div>
+    <div class="col-sm-6">
+        <div class="input-group" style="margin: auto;">
+
+            <label> Sort type</label>
+            <select id="sorttype" class="form-control selectpicker">
+                <option value="s-date">Date</option>
+                <option value="s-vk">Vk first</option>
+                <option value="s-inst">Instagram first</option>
+            </select>
+        </div>
+    </div>
+
 </div>
 
     <div class="row" style="padding: 10px">
@@ -168,8 +182,13 @@
 
                 <a  target="_blank" title="link VK page" id="linkVkButton" href="#" style="padding: 8px;background: none;" class="pswp__button pswp__button--vk"><i style="  font-size: 26px;color: #fff;" class="fa fa-vk"></i>
                 </a>
+
+                <a  target="_blank" title="Instagram Page" id="linkInstagram" href="#" style="padding: 8px;background: none;" class="pswp__button pswp__button--vk"><i style="  font-size: 26px;color: #fff;" class="fa fa-instagram"></i>
+                </a>
                 <a  target="_blank" title="show in Google Map" id="linkGoogleMap" href="#" style="padding: 8px;background: none;padding-left: 15px;" class="pswp__button pswp__button--vk"><i style="  font-size: 26px;color: #fff;" class="fa fa-map-marker "></i>
                 </a>
+
+
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
                 <!-- element will get class pswp__preloader--active when preloader is running -->
                 <div class="pswp__preloader">

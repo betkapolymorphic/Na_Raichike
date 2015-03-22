@@ -65,6 +65,11 @@ $(function(){
         Application.setOption('count',parseInt($('#count').val()));
 
         imagesArray=[];
+        var imagesVK = [];
+        var imagesInsta = [];
+
+        var endedThreads = 0;
+        $("#loadingModal").modal('show');
         if(Application.getOption('instaToken') && $("#checkBoxInstagram").is(":checked")){
             console.log('creating request');
             findPlaces(Application.getOption('lat'),
@@ -72,23 +77,42 @@ $(function(){
                 Application.getOption('instaToken'),function(data){
                     console.log("RECEIVE DATA!");
                     for(var i=0;i<data.length;i++){
-                       // var curPhoto
+                        var curMedia = data[i];
+                        if(curMedia.meta.code!=200){
+                            continue;
+                        }
+
+                        curMedia = curMedia.data;
+                        curMedia.forEach(function (photo) {
+                            console.log(photo);
+                            if(photo.type=="image")
+                            imagesInsta.push({
+                                src:photo.images.standard_resolution.url,
+                                thumbnail:photo.images.thumbnail.url,
+                                //instaId:photo.user.id,
+                                w:photo.images.standard_resolution.width,
+                                h:photo.images.standard_resolution.height,
+                                title : (photo.caption ? photo.caption.text:"")+"<br><a target='_blank' href='https://ru.foursquare.com/explore?mode=url&q="+encodeURIComponent(photo.location.name)+"'>"+photo.location.name+"</a><br>"+(photo.caption ? moment.unix(parseInt(photo.caption.created_time)).format('MMMM Do YYYY, h:mm:ss a') :"")
+                                    +"<br>"+(photo.caption ? moment.unix(parseInt(photo.caption.created_time)).fromNow() : ""),
+                                lat:photo.location.latitude,
+                                timestamp : photo.caption ?  parseInt(photo.caption.created_time) : 0,
+                                lng:photo.location.longitude,
+                                photolinkInstagram:photo.link
+                            });
+                        });
                     }
-                    console.log(data);
+
+                    endedThreads++;
                 })
 
+        }else{
+            endedThreads++;
         }
 
-        return;
-        /*$.get("https://api.vk.com/method/photos.search?",{"q":1,'lat':lat,'long':lng,
-         'count':500,'radius':120,'version':'5.29'},
-         function(data){
-         alert(data);
-         }
-         );*/
-        var imageSizes = ['src','src_big','src_small','src_xbig','src_xxbig','src_xxxbig'];
 
-        $("#loadingModal").modal('show');
+
+
+
 
         if($("#checkBoxVK").is(":checked")){
             getPhotosVK(Application.getOption('lat'),Application.getOption('lng'),
@@ -96,10 +120,54 @@ $(function(){
                 function(data){
 
                     //easy ;)
-                    imagesArray.concat(data);
+                    imagesVK = data;
+                    endedThreads++;
                 });
+        }else{
+            endedThreads++;
         }
+        var threadWatcher = setInterval(function(){
+            if(endedThreads>=2) //vk + insta
+            {
+                console.log('all photo uploads!');
 
+
+
+                var sorttype = $('#sorttype').find(":selected").val();
+                if(sorttype=="s-date"){
+                    imagesArray = imagesArray.concat(imagesVK).concat(imagesInsta);
+                    imagesArray.sort(function(a,b){
+                        return b.timestamp- a.timestamp;
+                    });
+                }else if(sorttype=="s-vk"){
+                    imagesInsta.sort(function(a,b){
+                        return b.timestamp- a.timestamp;
+                    });
+                    imagesArray = imagesArray.concat(imagesVK).concat(imagesInsta);
+                }else{
+                    imagesInsta.sort(function(a,b){
+                        return b.timestamp- a.timestamp;
+                    });
+                    imagesArray = imagesArray.concat(imagesInsta).concat(imagesVK);
+                }
+
+
+
+
+
+                imagesVK = [];//delete free
+                imagesInsta=[];
+
+                console.log(imagesArray);
+                loadToGalery(imagesArray);
+                $("#loadingModal").modal('hide');
+
+                clearInterval(threadWatcher);
+
+
+            }
+            console.log('current ended threads : '+endedThreads +" \\ 2");
+        },500);
 
 
 
@@ -108,6 +176,13 @@ $(function(){
     $('#linkVkButton').click(function() {
         if(gallery.currItem.vkid>0)
             $(this).attr("href", "http://vk.com/id"+ gallery.currItem.vkid);
+        else
+            return false;
+    });
+
+    $('#linkInstagram').click(function() {
+        if(gallery.currItem.photolinkInstagram)
+            $(this).attr("href", gallery.currItem.photolinkInstagram);
         else
             return false;
     });
@@ -120,8 +195,21 @@ $(function(){
 });
 
 
+function loadToGalery(data)
+{
+    var imageBlock = $("#images");
+    imageBlock.children().remove();
+    for(var i=0;i<data.length;i++){
+        var curPhoto = data[i];
+        imageBlock.append('<div style="cursor: pointer;" onclick="showgalery('+(i)+')" class="item" ><img src="'+curPhoto['thumbnail']+'"></div>');
+    }
+    imageBlock.flexImages({rowHeight: 140});
+}
+
 var currentItemIndex = 0;
 var gallery;
+
+
 function showgalery(index){
      var pswpElement = document.querySelectorAll('.pswp')[0];
 
@@ -132,18 +220,26 @@ function showgalery(index){
         loop:false,
         history:false
     });
+
     gallery.listen('afterChange', function() {
         if(!gallery.currItem){
             return;
         }
         console.log(gallery.currItem);
+        var linkVkButton  = $("#linkVkButton");
+        var  linkInstaButton = $("#linkInstagram");
 
 
-
-        if(gallery.currItem.vkid<=0){
-            $("#linkVkButton").hide();
+        if(!gallery.currItem.vkid || gallery.currItem.vkid<=0){
+          linkVkButton.hide();
         }else{
-            $("#linkVkButton").show();
+            linkVkButton.show();
+        }
+
+        if(!gallery.currItem.photolinkInstagram){
+            linkInstaButton.hide();
+        }else{
+            linkInstaButton.show();
         }
 
     });
