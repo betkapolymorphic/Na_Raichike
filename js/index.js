@@ -19,8 +19,26 @@ $(function(){
     }
 
 
+    if(Application.getOption('instaToken')){
+        $("#checkBoxInstagram").prop('checked',true);
+    }
+    $("#checkBoxInstagram").click(function() {
+        if(!Application.getOption('instaToken')){
+            win = window.open("https://instagram.com/oauth/authorize/?client_id=d8e66baf0f344b47b504cde05aa94641&redirect_uri=http://drup.com/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+            win.onbeforeunload = function(){
+                try {
+                    var tok = win.location.hash.split('=')[1];
+                    if(tok){
+                        Application.setOption('instaToken',tok);
+                        $("#checkBoxInstagram").prop('checked',true);
+                    }
 
+                }catch (err){}
+            };
+            return false;
+        }
 
+    });
 
 
 
