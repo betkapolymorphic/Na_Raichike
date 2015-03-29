@@ -4,12 +4,13 @@
 var imagesArray = [];
 var win = {};
 var Application = ApplicationSingleton.getInstance();
+Application.loadOptions();
 
 $(function(){
 
     initRangeSlider();
 
-    Application.loadOptions();
+
     if(Application.getOption('radius')){
             $('#number').val(Application.getOption('radius'));
         $('input[type="range"]').val(Application.getOption('radius')).change();
@@ -24,8 +25,12 @@ $(function(){
     }
     $("#checkBoxInstagram").click(function() {
         if(!Application.getOption('instaToken')){
-            win = window.open("https://instagram.com/oauth/authorize/?client_id=d8e66baf0f344b47b504cde05aa94641&redirect_uri=http://drup.com/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+            //win = window.open("https://instagram.com/oauth/authorize/?client_id=176df16d1d1a43a28932e19d3dee0612&redirect_uri=http://vraenchike.esy.es/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+
+            win = window.open("https://instagram.com/oauth/authorize/?client_id=e89c15f39bc34a039d2885ceac63f008&redirect_uri=http://drup.com/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+
             win.onbeforeunload = function(){
+              //  alert(1);
                 try {
                     var tok = win.location.hash.split('=')[1];
                     if(tok){
@@ -33,7 +38,9 @@ $(function(){
                         $("#checkBoxInstagram").prop('checked',true);
                     }
 
-                }catch (err){}
+                }catch (err){
+                    console.log(err);
+                }
             };
             return false;
         }
@@ -46,7 +53,7 @@ $(function(){
     $("#findGirlsButton").on('click',function(){
 
 
-        /*win = window.open("https://instagram.com/oauth/authorize/?client_id=d8e66baf0f344b47b504cde05aa94641&redirect_uri=http://drup.com/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+        /*win = window.open("https://instagram.com/oauth/authorize/?client_id=d8e66baf0f344b47b504cde05aa94641&redirect_uri=http://oocom/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
         win.onbeforeunload = function(){
             alert(win.location.hash.split('=')[1]);
         };
@@ -89,6 +96,7 @@ $(function(){
                             imagesInsta.push({
                                 src:photo.images.standard_resolution.url,
                                 thumbnail:photo.images.thumbnail.url,
+                                thumbnail_w:/*photo.images.thumbnail.width*/150,
                                 //instaId:photo.user.id,
                                 w:photo.images.standard_resolution.width,
                                 h:photo.images.standard_resolution.height,
@@ -126,12 +134,15 @@ $(function(){
         }else{
             endedThreads++;
         }
+
         var threadWatcher = setInterval(function(){
             if(endedThreads>=2) //vk + insta
             {
                 console.log('all photo uploads!');
 
-
+                if(imagesVK.length==0 && $("#checkBoxVK").is(":checked")){
+                    sweetAlert("Oops...", "Vk images not load:( Try increase radius or chose other location!", "error");
+                }
 
                 var sorttype = $('#sorttype').find(":selected").val();
                 if(sorttype=="s-date"){
@@ -153,16 +164,22 @@ $(function(){
 
 
 
-
-
                 imagesVK = [];//delete free
                 imagesInsta=[];
 
                 console.log(imagesArray);
-                loadToGalery(imagesArray);
-                $("#loadingModal").modal('hide');
 
+
+
+                try{
+                    Application.loadToGammaGallery(imagesArray);
+
+                }catch (e){console.log(e);}
+                $("#loadingModal").modal('hide');
                 clearInterval(threadWatcher);
+
+
+
 
 
             }
@@ -195,16 +212,7 @@ $(function(){
 });
 
 
-function loadToGalery(data)
-{
-    var imageBlock = $("#images");
-    imageBlock.children().remove();
-    for(var i=0;i<data.length;i++){
-        var curPhoto = data[i];
-        imageBlock.append('<div style="cursor: pointer;" onclick="showgalery('+(i)+')" class="item" ><img src="'+curPhoto['thumbnail']+'"></div>');
-    }
-    imageBlock.flexImages({rowHeight: 140});
-}
+
 
 var currentItemIndex = 0;
 var gallery;

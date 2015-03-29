@@ -3,26 +3,27 @@
 <!DOCTYPE html>
 <html >
 <head>
+    <style>
+
+        .item {
+            float: left;
+        }
+    </style>
+    <title>VRaenchike</title>
     <meta name="viewport" content="width=device-width">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <script src="http://maps.googleapis.com/maps/api/js"></script>
-    <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+
     <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
     <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="/js/libs/rangeslider.min.js"></script>
-    <script src="/js/photoresources/insta.js"></script>
-    <script src="/js/photoresources/vk.js"></script>
-    <script src="/js/ApplicationState.js"></script>
-    <script src="/js/cookie.js"></script>
-    <script src="/js/libs/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/style_gamma.css">
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="/css/photoswipe.css">
     <link rel="stylesheet" href="/css/jquery.flex-images.css">
@@ -31,20 +32,11 @@
     <link rel="stylesheet" href="/css/rangeslider.css">
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/bootstrap-select.css">
-    <script src="/js/libs/photoswipe.js"></script>
-    <script src="/js/libs/moment-with-locales.js"></script>
 
 
-    <script src="/js/libs/photoswipe-ui-default.js"></script>
-    <script src="/js/libs/jquery.flex-images.min.js"></script>
-    <script src="/js/init.js"></script>
-    <script src="/js/index.js"></script>
 
-    <script src="/js/mapInit.js"></script>
-<!--
-    <script src="/js/sweet-alert.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/sweet-alert.css">
--->
+
 
 </head>
 
@@ -54,7 +46,7 @@
 	<div  id="googleMap" style="width:450px;height:380px;"></div>
     <div class="row" style="padding: 10px">
         <div class="col-sm-12">
-            <label> Radius(m)</label>
+            <label> Radius(m) - only vk</label>
             <input  data-rangeslider id="rangeslider" class="form-control" type="range" min="100" max="2000" step="25" value="100">
             <input  style=" margin-top: 13px;" type="number" id='number' value='100' class="form-control" aria-describedby="basic-addon1">
 
@@ -116,12 +108,16 @@
 
 
 </div>
+<!--FLEX IMAGE GALLERY-->
+<div id="images" class=" flex-images" style=";max-width: 900px;margin: auto"></div>
+<!--END FLEX IMAGE GALLERY-->
+<div class="main" id="container">
 
-    <div id="images" class=" flex-images" style=";max-width: 900px;margin: auto">
+    <!--GAMMA IMAGE GALLERY-->
 
 
-</div><h1 class='wating' style='display:none;'>WAIT PLEASE</h1>
-
+    <!--END GAMMA IMAGE GALLERY-->
+</div>
 
 
 
@@ -138,7 +134,6 @@
         </div>
     </div>
 </div>
-</body>
 
 
 
@@ -217,9 +212,53 @@
     </div>
 </div>
 
+
 <footer>
     Create by&nbsp;<a href="http://vk.com/babylover">Betka</a>
 </footer>
+
+
+<script src="http://maps.googleapis.com/maps/api/js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+<!--
+<script src="/js/libs/modernizr.custom.70736.js"></script>
+<script src="/js/libs/jquery.masonry.min.js"></script>
+<script src="/js/libs/jquery.history.js"></script>
+<script src="/js/libs/js-url.min.js"></script>
+<script src="/js/libs/jquerypp.custom.js"></script>
+<script src="/js/libs/gamma.js"></script>
+-->
+<script src="/js/libs/masonry.pkgd.min.js"></script>
+
+<script src="/js/photoresources/insta.js"></script>
+<script src="/js/photoresources/vk.js"></script>
+<script src="/js/ApplicationState.js"></script>
+<script src="/js/cookie.js"></script>
+<script src="/js/libs/bootstrap-select.min.js"></script>
+<!-- Latest compiled and minified JavaScript -->
+
+
+<script src="/js/libs/photoswipe.js"></script>
+<script src="/js/libs/moment-with-locales.js"></script>
+
+
+<script src="/js/libs/photoswipe-ui-default.js"></script>
+<script src="/js/libs/jquery.flex-images.min.js"></script>
+<script src="/js/init.js"></script>
+<script src="/js/index.js"></script>
+
+<script src="/js/mapInit.js"></script>
+
+<script src="/js/libs/sweet-alert.min.js"></script>
+
+
+</body>
+
+
+
 
 </html>
 

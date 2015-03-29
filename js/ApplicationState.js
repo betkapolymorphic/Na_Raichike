@@ -28,6 +28,52 @@ var ApplicationSingleton = (function () {
         object.setOption = function(name,val){
             object.options[name] = val;
         };
+
+        object.loadToGalery = function(data)
+        {
+            var imageBlock = $("#images");
+            imageBlock.children().remove();
+            for(var i=0;i<data.length;i++){
+                var curPhoto = data[i];
+                imageBlock.append('<div style="cursor: pointer;" onclick="showgalery('+(i)+')" class="item" ><img src="'+curPhoto['thumbnail']+'"></div>');
+
+
+
+            }
+            imageBlock.flexImages({rowHeight: 140});
+        };
+        object.loadToGammaGallery = function(data)
+        {
+            var imageBlock = $("#container");
+          imageBlock.children().remove();
+            for(var i=0;i<data.length;i++) {
+                var curPhoto = data[i];
+
+
+                try {
+                    var htmlToApped = ' <div class="container">';
+
+                    htmlToApped += '<div class="item" style="cursor: pointer;" class="item" onclick="showgalery(' + i + ')"><img width="' + curPhoto.thumbnail_w + '" src="' + curPhoto.thumbnail + '">   </div>';
+
+                    htmlToApped += '</div>';
+                    imageBlock.append(htmlToApped);
+                }catch (e){
+                    console.log(e);
+                }
+
+            }
+            var container = document.querySelector('#container');
+            var msnry = new Masonry( container, {
+                // options
+
+                itemSelector: '.item',
+                isFitWidth:true
+            });
+
+
+
+        };
+
         return object;
     }
 

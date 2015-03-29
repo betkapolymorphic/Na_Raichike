@@ -13,21 +13,35 @@ function findPlaces(lat,lng,token,callbackfunc){
         console.log('place finded');
         console.log(data);
         console.log('~~start find media~~');
-        if(data.meta.code!=200){
-            alert('can"t find images(insta) error code'+data.meta.code);
-        }
+
 
         var endedThreads = 0;
-        data = data.data;
+        if(data.meta.code!=200){
+
+            if(data.meta.code==400){
+               swal("Oops...", "Please sign in instagram", "error");
+                Application.setOption('instaToken','');
+                Application.saveOptions();
+            }else{
+                alert('can"t find images(insta) error code'+data.meta.code);
+            }
+
+            data = [];
+            endedThreads=0;
+
+        }
+        else {
+            data = data.data;
 
 
-        for(var i=0;i<data.length;i++){
-            findPhotos(data[i].id,token,function(data){
-                 console.log(data);
-                outData.push(data);
-                endedThreads++;
+            for (var i = 0; i < data.length; i++) {
+                findPhotos(data[i].id, token, function (data) {
+                    console.log(data);
+                    outData.push(data);
+                    endedThreads++;
 
-            });
+                });
+            }
         }
 
 

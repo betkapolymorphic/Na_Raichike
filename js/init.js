@@ -14,28 +14,15 @@ function initRangeSlider(){
         // Callback function
         onSlide: function(position, value) {
             numberElement.val(value);
+           // eval('setRadius('+value+')');
+            //setRadius(value);
+
         },
 
         // Callback function
         onSlideEnd: function(position, value) {
             numberElement.val(value);
+            setRadius(value);
         }
     });
-}
-function initCurrentGeolocation(){
-    navigator.geolocation.getCurrentPosition(handle_geolocation_query);
-
-    function handle_geolocation_query(position){
-        var lng = position.coords.longitude;
-        var lat = position.coords.latitude;
-
-
-        if(!marker){
-            marker = new google.maps.Marker();
-        }
-        marker.setPosition(new google.maps.LatLng(lat,lng));
-
-        marker.setMap(map);
-
-    }
 }
