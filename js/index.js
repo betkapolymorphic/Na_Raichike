@@ -25,9 +25,9 @@ $(function(){
     }
     $("#checkBoxInstagram").click(function() {
         if(!Application.getOption('instaToken')){
-            //win = window.open("https://instagram.com/oauth/authorize/?client_id=176df16d1d1a43a28932e19d3dee0612&redirect_uri=http://vraenchike.esy.es/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+            win = window.open("https://instagram.com/oauth/authorize/?client_id=176df16d1d1a43a28932e19d3dee0612&redirect_uri=http://vraenchike.esy.es/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
 
-            win = window.open("https://instagram.com/oauth/authorize/?client_id=e89c15f39bc34a039d2885ceac63f008&redirect_uri=http://drup.com/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
+           // win = window.open("https://instagram.com/oauth/authorize/?client_id=e89c15f39bc34a039d2885ceac63f008&redirect_uri=http://drup.com/thanks.html&response_type=token", "_blank", "toolbar=yes, scrollbars=yes, resizable=yes, top=500, left=500, width=400, height=400");
 
             win.onbeforeunload = function(){
               //  alert(1);
@@ -172,12 +172,18 @@ $(function(){
 
 
                 try{
-                    Application.loadToGammaGallery(imagesArray);
+                    Application.loadToGammaGallery(imagesArray,function(){
+                        $("#loadingModal").modal('hide');
 
-                }catch (e){console.log(e);}
-                $("#loadingModal").modal('hide');
+                    });
+
+                }catch (e){
+                    $("#loadingModal").modal('hide');
+
+                    console.log(e);
+                }
+
                 clearInterval(threadWatcher);
-
 
 
 

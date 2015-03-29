@@ -42,33 +42,64 @@ var ApplicationSingleton = (function () {
             }
             imageBlock.flexImages({rowHeight: 140});
         };
-        object.loadToGammaGallery = function(data)
+        object.loadToGammaGallery = function(data,imagesLoadedCallback)
         {
             var imageBlock = $("#container");
           imageBlock.children().remove();
+            var htmlToAppend ='';
             for(var i=0;i<data.length;i++) {
                 var curPhoto = data[i];
 
 
                 try {
-                    var htmlToApped = ' <div class="container">';
-
-                    htmlToApped += '<div class="item" style="cursor: pointer;" class="item" onclick="showgalery(' + i + ')"><img width="' + curPhoto.thumbnail_w + '" src="' + curPhoto.thumbnail + '">   </div>';
-
-                    htmlToApped += '</div>';
-                    imageBlock.append(htmlToApped);
+                    htmlToAppend += '<div class="item" style="cursor: pointer;" class="item" onclick="showgalery(' + i + ')"><img width="' + curPhoto.thumbnail_w + '" src="' + curPhoto.thumbnail + '">   </div>';
                 }catch (e){
                     console.log(e);
                 }
 
             }
-            var container = document.querySelector('#container');
-            var msnry = new Masonry( container, {
-                // options
+                var $container = $('#container').masonry({
+                    itemSelector: '.item'
+                });
 
-                itemSelector: '.item',
-                isFitWidth:true
+            var $items = $(htmlToAppend);
+            var firstEnterFlag = true;
+            $items.hide();
+            $container.append($items);
+
+
+
+
+            $items.imagesLoaded().progress( function( imgLoad, image ) {
+                // get item
+                // image is imagesLoaded class, not <img>
+                // <img> is image.img
+                var $item = $( image.img ).parents('.item');
+                // un-hide item
+                $item.show();
+                // masonry does its thing
+                $container.masonry( 'appended', $item );
+               if(firstEnterFlag){
+                   firstEnterFlag=false;
+                   $('#container').masonry({
+                       itemSelector: '.item'
+                   });
+               }
             });
+            imagesLoadedCallback();
+
+            /*
+            var container = document.querySelector('#container');
+            var imgLoad = imagesLoaded( container );
+            imgLoad.on('always',function(){
+                var msnry = new Masonry( container, {
+
+                    itemSelector: '.item'
+
+                });
+                imagesLoadedCallback();
+            });*/
+
 
 
 
