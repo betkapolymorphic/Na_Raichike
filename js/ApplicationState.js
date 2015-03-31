@@ -45,6 +45,7 @@ var ApplicationSingleton = (function () {
         object.loadToGammaGallery = function(data,imagesLoadedCallback)
         {
             var imageBlock = $("#container");
+            imageBlock.masonry('destroy');
           imageBlock.children().remove();
             var htmlToAppend ='';
             for(var i=0;i<data.length;i++) {
@@ -68,16 +69,30 @@ var ApplicationSingleton = (function () {
             $container.append($items);
 
 
+            var minimalLeft = 100500;
+            var maxRight = 0;
+
 
 
             $items.imagesLoaded().progress( function( imgLoad, image ) {
-                // get item
-                // image is imagesLoaded class, not <img>
-                // <img> is image.img
+
                 var $item = $( image.img ).parents('.item');
                 // un-hide item
                 $item.show();
-                // masonry does its thing
+
+
+
+                var left= $item.position().left;
+                if(left<minimalLeft){
+                    minimalLeft = left;
+                }
+                if(left+$item.width()>maxRight){
+                    maxRight = left+$item.width();
+
+                }
+
+
+
                 $container.masonry( 'appended', $item );
                if(firstEnterFlag){
                    firstEnterFlag=false;
